@@ -1,0 +1,35 @@
+version: "3"
+
+services:
+  server:
+    build:
+      context: ./server/
+    command: npm run dev
+    ports:
+      - "3000:5000"
+    volumes:
+      - type: bind
+        source: ./server/
+        target: /usr/app/server/
+      - node_server_modules:/usr/app/server/node_modules/
+    env_file:
+      - ./config/dev.env
+    depends_on:
+      - api
+  api:
+    build:
+      context: ./books/
+    command: npm run dev
+    volumes:
+      - type: bind
+        source: ./books/
+        target: /usr/app/api
+      - api_node_modules:/usr/app/api/node_modules/
+    ports:
+      - "3001:5000"
+    env_file:
+      - ./config/dev.env
+volumes:
+  node_server_modules:
+  api_node_modules:
+    
